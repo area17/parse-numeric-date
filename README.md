@@ -8,7 +8,7 @@ Date entry is hard for users. Date pickers, including the native one, aren't alw
 
 In his article ["Maybe You Don't Need a Date Picker"](https://adrianroselli.com/2019/07/maybe-you-dont-need-a-date-picker.html#Messaging), Adrian Roselli proposes using a text field which users enter a date into, some client side does some parsing and then some feedback is presented to the user.
 
-Its fairly straight forward to parse a known date format and convert to ISO format. But, what if users don't enter the date in your known format?
+It is fairly straight forward to parse a known date format and convert to ISO format. But, what if users don't enter the date in your known format?
 
 Well, that is what `parse-numeric-date` attempts to solve.
 
@@ -80,7 +80,7 @@ eg: a 29 in the string appear as 2922 rather than 29th of a month, 2022
 
 `parse-numeric-date` can't take natural input such as "December 12, 2022" - it is purely for parsing numeric inputs. Another assumption here is that such date entry, although natural in speech, isn't so natural to write or type - especially if the keyboard has been switched to a numeric keyboard on the users device.
 
-If you want such parsing, I suggest you look at:
+If you want such parsing, perhaps you need:
 * [`parse-numeric-date`](https://github.com/kensnyder/any-date-parser)
 * [`parse-dob`](https://github.com/HenrikJoreteg/parse-dob)
 

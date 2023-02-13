@@ -1,0 +1,36 @@
+{
+  "name": "@area17/parse-numeric-date",
+  "version": "0.0.1",
+  "description": "Parse numeric based date inputs",
+  "type": "module",
+  "source": "src/index.js",
+  "exports": {
+      "require": "./dist/parse-numeric-date.cjs",
+      "default": "./dist/parse-numeric-date.modern.js"
+  },
+  "main": "./dist/parse-numeric-date.cjs",
+  "module": "./dist/parse-numeric-date.module.js",
+  "unpkg": "./dist/parse-numeric-date.umd.js",
+  "scripts": {
+      "build": "microbundle --css",
+      "dev": "microbundle watch --css",
+      "test": "jest",
+      "format": "prettier --write . '!dist/**/*'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/area17/parse-numeric-date.git"
+  },
+  "keywords": [
+    "date"
+  ],
+  "author": "A17 <dev@area17.com> (https://area17.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/area17/parse-numeric-date/issues"
+  },
+  "homepage": "https://github.com/area17/parse-numeric-date#readme",
+  "devDependencies": {
+    "microbundle": "^0.15.1"
+  }
+}

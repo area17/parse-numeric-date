@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>A17 parse-numeric-date</title>
+        <link
+            media="all"
+            rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/sunburst.min.css"
+        />
+        <style>
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: inherit;
+                touch-action: inherit;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: inherit;
+            }
+
+            html {
+                overflow-x: hidden;
+                overflow-y: scroll;
+                box-sizing: border-box;
+                touch-action: manipulation;
+                scroll-behavior: smooth;
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                flex-wrap: nowrap;
+                min-height: 100vh;
+                font-family: var(--serif-font);
+                font-size: 100%;
+                font-kerning: normal;
+                line-height: 1;
+                text-rendering: optimizeLegibility;
+                font-variant-ligatures: common-ligatures;
+                font-feature-settings: 'kern' on;
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+                color: #1a1a1a;
+                background: #fff;
+                font-family: SuisseIntl, Helvetica, Arial, sans-serif;
+            }
+
+            .f-h1 {
+                font-weight: 500;
+                font-size: 2rem;
+                line-height: 1.2;
+                letter-spacing: -0.02em;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            @media screen and (min-width: 650px) {
+                .f-h1 {
+                    font-size: 2.25rem;
+                }
+            }
+
+            @media screen and (min-width: 990px) {
+                .f-h1 {
+                    font-size: 3rem;
+                }
+            }
+
+            .f-h2 {
+                font-weight: 500;
+                font-size: 1.25rem;
+                line-height: 1.2;
+                letter-spacing: -0.02em;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            @media screen and (min-width: 990px) {
+                .f- h2 {
+                    font-size: 1.75rem;
+                }
+            }
+            @media screen and (min-width: 650px) {
+                .f-h2 {
+                    font-size: 1.5rem;
+                }
+            }
+
+            .f-body,
+            input,
+            output,
+            table {
+                font-size: 0.875rem;
+                line-height: 1.7;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            @media screen and (min-width: 650px) {
+                .f-body,
+                input,
+                output,
+                table {
+                    font-size: 1rem;
+                }
+            }
+
+            header {
+                padding: 0.75rem 2.5rem;
+                border-bottom: 1px solid #000;
+            }
+
+            main {
+                flex-grow: 1;
+                padding: 3.75rem 2.5rem 0;
+            }
+
+            footer {
+                margin-top: 3.75rem;
+                padding: 1.5rem 2.5rem;
+                border-top: 1px solid #000;
+            }
+
+            header h1 {
+                padding-top: 3.75rem;
+            }
+
+            @media screen and (min-width: 650px) {
+                header h1 {
+                    padding-top: 5rem;
+                }
+            }
+
+            @media screen and (min-width: 990px) {
+                header h1 {
+                    padding-top: 6.25rem;
+                }
+            }
+
+            header ul,
+            footer ul {
+                display: flex;
+                flex-direction: row;
+            }
+
+            header li,
+            footer li {
+                margin-top: 1.25rem;
+                list-style-type: none;
+            }
+
+            header li:first-child,
+            footer li:first-child {
+                margin-right: auto;
+            }
+
+            @media screen and (min-width: 544px) {
+                header li,
+                footer li {
+                    margin-top: 0;
+                    margin-right: 1.25rem;
+                }
+            }
+
+            header a,
+            footer a {
+                color: #1a1a1a;
+                text-decoration: none;
+            }
+
+            header svg,
+            footer svg {
+                display: inline-block;
+                vertical-align: text-bottom;
+            }
+
+            main h2:not(:first-child) {
+                margin-top: 3.5rem;
+                border-top: 1px solid #d9d9d9;
+                padding-top: 3rem;
+            }
+
+            main p {
+                margin-top: 1rem;
+            }
+
+            form {
+                margin: 2.5rem 0;
+                padding: 1.25rem;
+                background: #f2f2f2;
+            }
+
+            fieldset {
+                border: 0 none;
+            }
+
+            label {
+                display: block;
+            }
+
+            input,
+            output {
+                display: block;
+                width: 100%;
+                padding: 0.125rem 0.5rem;
+                flex: 1;
+                height: 2.1875em;
+            }
+
+            .input-container {
+                position: relative;
+            }
+
+            pre,
+            code,
+            kbd {
+                padding: 0;
+                font-family: 'Lucida Console', Courier, monospace;
+                font-size: 0.875rem;
+                line-height: 1.2;
+                font-weight: 400;
+            }
+
+            pre {
+                display: block;
+                margin-top: 1rem;
+            }
+
+            code,
+            kbd {
+                display: inline-block;
+                background-color: #eee;
+                color: #000;
+                vertical-align: middle;
+                padding: 0.125rem 0.375rem;
+            }
+
+            pre code {
+                display: block;
+                background-color: #1a1a1a;
+                color: #f8f8f8;
+            }
+
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
+            }
+
+            .row {
+              display: flex;
+              flex-flow: row wrap;
+              align-items: center;
+            }
+
+            .row + .row {
+              margin-top: 0.625rem;
+            }
+
+            label,
+            .label {
+              flex: 0 0 auto;
+              width: 7.5rem;
+              margin-right: 0.625rem;
+            }
+
+            output {
+              background: #f2f2f2;
+              border: 1px solid #000;
+            }
+
+            table {
+              margin-top: 2rem;
+            }
+
+            th {
+              text-align: left;
+              font-weight: bold;
+            }
+
+            th,
+            td {
+              padding-top: 0.25rem;
+              padding-bottom: 0.25rem;
+              padding-left: 1rem;
+            }
+
+            th:first-child,
+            td:first-child {
+                padding-left: 0;
+            }
+
+            ul {
+                display: flex;
+                flex-flow: row wrap;
+                margin-top: 0.5rem;
+            }
+
+            li {
+                margin-right: 1rem;
+                list-style-type: none;
+            }
+
+            button {
+                padding: 0.25rem 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <ul class="f-body">
+                <li>
+                    <a href="https://area17.com/" target="_blank">AREA 17</a>
+                </li>
+                <li>
+                    <a href="https://github.com/area17/parse-numeric-date">
+                        GitHub
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 1024 1024"
+                            fill="none"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
+                                transform="scale(64)"
+                                fill="currentColor"
+                            ></path>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+            <h1 class="f-h1">parse-numeric-date</h1>
+        </header>
+        <main>
+            <form novalidate>
+              <fieldset>
+                <legend class="sr-only">Date parse test</legend>
+                <div class="row">
+                  <label for="d1">Date</label>
+                  <input type="text" id="d1" name="d1" pattern="\d{2,4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD">
+                </div>
+                <div class="row">
+                  <span class="label">Output</span>
+                  <output name="d1Output" for="d1"></output>
+                </div>
+              </fieldset>
+            </form>
+
+            <p>Set locale to:</p>
+            <ul>
+                <li><button data-locale="en-GB">en-GB</button></li>
+                <li><button data-locale="fr-fr">fr-Fr</button></li>
+                <li><button data-locale="en-US">en-US</button></li>
+                <li><button data-locale="reset">reset</button></li>
+            </ul>
+            <p>Current locale: <strong data-locale></strong></p>
+            <p>Updating the locale may update the expected dates to account for the likelihood of users entering m/d/y over d/m/y. <br>Remember, <code>@area17/parse-numeric-date</code> is trying to show you a sensible suggestion based on the input, the more ambiguous the input, the less likely it is to be correct - make sure you give your users some feedback.</p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Input</th>
+                  <th>Expected</th>
+                  <th>Output</th>
+                  <th>Pass/Fail</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <!-- <pre><code></code></pre> -->
+        </main>
+        <footer>
+            <ul>
+                <li>
+                    <a href="https://area17.com/" target="_blank"
+                        >Copyright &copy; AREA 17</a
+                    >
+                </li>
+                <li>
+                    <a href="https://github.com/area17/parse-numeric-date">
+                        GitHub
+                        <svg
+                            class="inline-block align-text-bottom"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 1024 1024"
+                            fill="none"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z"
+                                transform="scale(64)"
+                                fill="currentColor"
+                            ></path>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </footer>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/fuzzysort@2.0.4/fuzzysort.min.js"></script>
+        <script type="module">
+            (async () => {
+                const { default: parseNumericDate } = await import('./dist/parse-numeric-date.modern.js');
+
+                const $tbody = document.querySelector('tbody');
+                const $input = document.querySelector('input');
+                const $output = document.querySelector('output');
+                const $localeSelectors = document.querySelectorAll('button');
+                const $localeDisplay = document.querySelector('strong[data-locale]');
+
+                let locale = new Intl.NumberFormat().resolvedOptions().locale;
+                const getLocaleOrder = () => {
+                  const dateStr = new Date(2000, 11, 13).toLocaleDateString(locale);
+                  const parts = [
+                    { name: 'd', index: dateStr.indexOf('13') },
+                    { name: 'm', index: dateStr.indexOf('12') },
+                    { name: 'y', index: dateStr.indexOf('2000') },
+                  ].sort((a, b) => a.index - b.index);
+                  return parts.map(item => item.name).join('-');
+                };
+
+                let localeOrder = getLocaleOrder();
+
+                const parseNumericDateOptions = {
+                    locale: locale,
+                };
+
+                const tests = [
+                  ['2022-02-10', '2022-02-10', 'y-m-d'],
+                  ['2022.02.10', '2022-02-10', 'y-m-d'],
+                  ['2022/02/10', '2022-02-10', 'y-m-d'],
+                  ['10 02 2022', '2022-02-10', 'd-m-y'],
+                  ['1 12 2022', '2022-12-01', 'd-m-y'],
+                  ['2022-2-10', '2022-02-10', 'y-m-d'],
+                  ['2022-2-2', '2022-02-02', 'y-m-d'],
+                  ['122922', '2022-12-29', 'm-d-y'],
+                  ['291222', '2022-12-29', 'd-m-y'],
+                  ['29122022', '2022-12-29', 'd-m-y'],
+                  ['12292022', '2022-12-29', 'm-d-y'],
+                  ['010122', '2022-01-01', 'd-m-y'],
+                  ['220210', '2022-02-10', 'y-m-d'],
+                  ['12/29/22', '2022-12-29', 'm-d-y'],
+                  ['2010-02-01', '2010-02-01', 'y-m-d'],
+                  ['01-01-2022', '2022-01-01', 'd-m-y'],
+                  ['01-01-22', '2022-01-01', 'd-m-y'],
+                  ['1-1-22', '2022-01-01', 'd-m-y'],
+                  ['1-10-2022', '2022-10-01', 'd-m-y'],
+                  ['1-10-22', '2022-10-01', 'd-m-y'],
+                  ['122982', '1982-12-29', 'd-m-y'],
+                  ['291282', '1982-12-29', 'm-d-y'],
+                  ['29121982', '1982-12-29', 'm-d-y'],
+                  ['12291982', '1982-12-29', 'd-m-y'],
+                  ['010182', '1982-01-01', 'd-m-y'],
+                  ['9382', '1982-03-09', 'd-m-y'],
+                  ['931982', '1982-03-09', 'd-m-y'],
+                  ['090382', '1982-03-09', 'd-m-y'],
+                  ['09031982', '1982-03-09', 'd-m-y'],
+                  ['2023-02-10', '2023-02-10', 'y-m-d'],
+                  ['2023.02.10', '2023-02-10', 'y-m-d'],
+                  ['2023/02/10', '2023-02-10', 'y-m-d'],
+                  ['10 02 2023', '2023-02-10', 'd-m-y'],
+                  ['1 12 2023', '2023-12-01', 'd-m-y'],
+                  ['2023-2-10', '2023-02-10', 'y-m-d'],
+                  ['2023-2-2', '2023-02-02', 'y-m-d'],
+                  ['122923', '2023-12-29', 'm-d-y'],
+                  ['291223', '2023-12-29', 'd-m-y'],
+                  ['29122023', '2023-12-29', 'd-m-y'],
+                  ['12292023', '2023-12-29', 'm-d-y'],
+                  ['010123', '2023-01-01', 'd-m-y'],
+                  ['230210', '2023-02-10', 'y-m-d'],
+                  ['12/29/23', '2023-12-29', 'm-d-y'],
+                  ['2023-02-01', '2023-02-01', 'y-m-d'],
+                  ['01-01-2023', '2023-01-01', 'd-m-y'],
+                  ['01-01-23', '2023-01-01', 'd-m-y'],
+                  ['1-1-23', '2023-01-01', 'd-m-y'],
+                  ['1-10-2023', '2023-10-01', 'd-m-y'],
+                  ['1-10-23', '2023-10-01', 'd-m-y'],
+                  ['2024-02-10', '2024-02-10', 'y-m-d'],
+                  ['2024.02.10', '2024-02-10', 'y-m-d'],
+                  ['2024/02/10', '2024-02-10', 'y-m-d'],
+                  ['10 02 2024', '2024-02-10', 'd-m-y'],
+                  ['1 12 2024', '2024-12-01', 'd-m-y'],
+                  ['2024-2-10', '2024-02-10', 'y-m-d'],
+                  ['2024-2-2', '2024-02-02', 'y-m-d'],
+                  ['122924', '2024-12-29', 'm-d-y'],
+                  ['291224', '2024-12-29', 'd-m-y'],
+                  ['29122024', '2024-12-29', 'd-m-y'],
+                  ['12292024', '2024-12-29', 'm-d-y'],
+                  ['010124', '2024-01-01', 'd-m-y'],
+                  ['240210', '2024-02-10', 'y-m-d'],
+                  ['12/29/24', '2024-12-29', 'd-m-y'],
+                  ['2024-02-01', '2024-02-01', 'y-m-d'],
+                  ['01-01-2024', '2024-01-01', 'd-m-y'],
+                  ['01-01-24', '2024-01-01', 'd-m-y'],
+                  ['1-1-24', '2024-01-01', 'd-m-y'],
+                  ['1-10-2024', '2024-10-01', 'd-m-y'],
+                  ['1-10-24', '2024-10-01', 'd-m-y'],
+                  ['1884-02-10', '1884-02-10', 'y-m-d'],
+                  ['1884.02.10', '1884-02-10', 'y-m-d'],
+                  ['1884/02/10', '1884-02-10', 'y-m-d'],
+                  ['10 02 1884', '1884-02-10', 'd-m-y'],
+                  ['1 12 1884', '1884-12-01', 'd-m-y'],
+                  ['12 29 1884', '1884-12-29', 'm-d-y'],
+                  ['1884-2-10', '1884-02-10', 'y-m-d'],
+                  ['1884-2-2', '1884-02-02', 'y-m-d'],
+                  ['1884-02-01', '1884-02-01', 'y-m-d'],
+                  ['01-01-1884', '1884-01-01', 'd-m-y'],
+                  ['1-10-1884', '1884-10-01', 'd-m-y']
+                ];
+
+                const toISO = (y, m, d) => {
+                  return `${y}-${m.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+                };
+
+                const formatDate = (date) => {
+                  date = new Date(date);
+                  return toISO(date.getFullYear(), date.getMonth() + 1, date.getDate());
+                };
+
+                const testStr = (str, expected, format) => {
+                  let t1 = '';
+                  let t2 = '-';
+
+                  try {
+                    t1 = parseNumericDate(str, parseNumericDateOptions);
+                    if (!t1) {
+                      throw new Error('returned null');
+                    }
+                    t1 = formatDate(t1);
+                  } catch (err) {
+                    //console.log('parseDateStr', str, expected, err);
+                    t1 = 'unable to parse';
+                  }
+
+                  if (expected) {
+                    let expectedParts = expected.split('-').map(n => parseInt(n, 10));
+                    let expectedY, expectedM, expectedD;
+                    if (format === 'y-m-d') {
+                      expectedY = expectedParts[0];
+                      expectedM = expectedParts[1];
+                      expectedD = expectedParts[2];
+                    } else if (format !== localeOrder) {
+                      format = localeOrder;
+
+                      expectedY = expectedParts[0];
+                      expectedM = expectedParts[2];
+                      expectedD = expectedParts[1];
+
+                      if (expectedM > 12) {
+                        expectedM = expectedParts[1];
+                        expectedD = expectedParts[2];
+                      }
+                    } else {
+                      expectedY = expectedParts[0];
+                      expectedM = expectedParts[1];
+                      expectedD = expectedParts[2];
+                    }
+
+                    let expect = toISO(expectedY, expectedM, expectedD);
+                    expected = expect;
+                    //console.log(expected === expect, format, localeOrder, str, expected, expect, expectedY, expectedM, expectedD);
+
+                    t2 = expected === t1 ? '✅' : '❌';
+                  } else {
+                    const outputOptions = {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    };
+                    $output.value = t1 === 'unable to parse' ? 'unable to parse' : new Date(t1).toLocaleDateString(locale, outputOptions);
+                  }
+
+                  let $tr = document.createElement('tr');
+                  $tr.innerHTML += `<th>${str}</th><td>${expected || '-'}</td><td>${t1}</td><td>${t2}</td>`;
+                  if (expected) {
+                    $tbody.append($tr);
+                  } else {
+                    $tbody.prepend($tr);
+                  }
+                };
+
+                const runTests = () => {
+                  $tbody.innerHTML = '';
+                  $localeDisplay.textContent = `${locale}${ locale === new Intl.NumberFormat().resolvedOptions().locale ? ' (default)' : ''}`;
+                  tests.forEach((test) => {
+                    testStr(test[0], test[1], test[2]);
+                  });
+                };
+
+                $input.addEventListener('change', () => {
+                    testStr($input.value, null);
+                });
+                $localeSelectors.forEach($btn => {
+                    $btn.addEventListener('click', () => {
+                        const newLocale = $btn.dataset.locale;
+
+                        if (newLocale === 'reset') {
+                            locale = new Intl.NumberFormat().resolvedOptions().locale;
+                        } else {
+                            locale = newLocale;
+                        }
+
+                        parseNumericDateOptions.locale = locale;
+
+                        localeOrder = getLocaleOrder();
+
+                        runTests();
+
+                        if ($input.value.length) {
+                            testStr($input.value, null);
+                        }
+                    });
+                });
+
+                runTests();
+
+                if (window.hljs) {
+                    hljs.highlightAll();
+                }
+            })();
+        </script>
+    </body>
+</html>

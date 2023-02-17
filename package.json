@@ -1,6 +1,6 @@
 {
   "name": "@area17/parse-numeric-date",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Parse numeric based date inputs",
   "type": "module",
   "source": "src/index.js",
@@ -12,8 +12,9 @@
   "module": "./dist/parse-numeric-date.module.js",
   "unpkg": "./dist/parse-numeric-date.umd.js",
   "scripts": {
-      "build": "microbundle --css",
-      "dev": "microbundle watch --css",
+      "build": "microbundle",
+      "dev": "microbundle watch",
+      "devdebug": "microbundle watch --compress false",
       "test": "jest",
       "format": "prettier --write . '!dist/**/*'"
   },

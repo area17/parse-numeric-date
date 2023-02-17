@@ -140,7 +140,7 @@ const getMostProbableDate = (dates) => {
 };
 
 const parseNumericDate = (dateStr, options) => {
-  if (options.locale) {
+  if (options?.locale) {
     locale = options.locale;
     localeOrder = getLocaleOrder();
   }

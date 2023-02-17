@@ -236,8 +236,52 @@ const parseNumericDate = (dateStr, options) => {
       d: dateStr.substring(6, 8),
       order: 'y-m-d'
     });
-    //
-    return getMostProbableDate(dates, dateStr);
+  }
+
+  // could be YYYYMMD, YYYYMDD,
+  // or DDMYYYY, MDDYYYY, DMMYYYY, MMDYYYY
+  if (dateStr.length === 7) {
+    dates.push({
+      y: dateStr.substring(0, 4),
+      m: dateStr.substring(4, 6),
+      d: dateStr.substring(6, 7),
+      order: 'y-m-d'
+    });
+
+    dates.push({
+      y: dateStr.substring(0, 4),
+      m: dateStr.substring(4, 5),
+      d: dateStr.substring(5, 7),
+      order: 'y-m-d'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 7),
+      m: dateStr.substring(2, 3),
+      d: dateStr.substring(0, 2),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 7),
+      m: dateStr.substring(1, 3),
+      d: dateStr.substring(0, 1),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 7),
+      m: dateStr.substring(0, 2),
+      d: dateStr.substring(2, 3),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 7),
+      m: dateStr.substring(0, 1),
+      d: dateStr.substring(2, 3),
+      order: 'd-m-y'
+    });
   }
 
   // or could be YYMMDD, DDMMYY, MMDDYY
@@ -285,9 +329,52 @@ const parseNumericDate = (dateStr, options) => {
       d: dateStr.substring(5, 6),
       order: 'y-m-d'
     });
+  }
 
-    //
-    return getMostProbableDate(dates, dateStr);
+  // could be YYMMD, YYMDD,
+  // or DDMYY, MDDYY, DMMYY, MMDYY
+  if (dateStr.length === 5) {
+    dates.push({
+      y: dateStr.substring(0, 2),
+      m: dateStr.substring(2, 4),
+      d: dateStr.substring(4, 5),
+      order: 'y-m-d'
+    });
+
+    dates.push({
+      y: dateStr.substring(0, 2),
+      m: dateStr.substring(2, 3),
+      d: dateStr.substring(3, 5),
+      order: 'y-m-d'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 5),
+      m: dateStr.substring(2, 3),
+      d: dateStr.substring(0, 2),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 5),
+      m: dateStr.substring(1, 3),
+      d: dateStr.substring(0, 1),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 5),
+      m: dateStr.substring(0, 2),
+      d: dateStr.substring(2, 3),
+      order: 'd-m-y'
+    });
+
+    dates.push({
+      y: dateStr.substring(3, 5),
+      m: dateStr.substring(0, 1),
+      d: dateStr.substring(2, 3),
+      order: 'd-m-y'
+    });
   }
 
   // could be YYMD, DMYY, MDYY
@@ -312,9 +399,10 @@ const parseNumericDate = (dateStr, options) => {
       d: dateStr.substring(3, 4),
       order: 'y-m-d'
     });
-    //
-    return getMostProbableDate(dates, dateStr);
   }
+
+  //
+  return getMostProbableDate(dates, dateStr);
 };
 
 export default parseNumericDate;

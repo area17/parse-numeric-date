@@ -1,6 +1,6 @@
 # parse-numeric-date
 
-Parse numeric based date inputs.
+Micro library to parse numeric based date inputs - ~4kb minified/~1kb gzip
 
 ## Mission Statement
 
@@ -78,7 +78,7 @@ eg: a 29 in the string appear as 2922 rather than 29th of a month, 2022
 
 ## Limitations
 
-`parse-numeric-date` can't take natural input such as "December 12, 2022" - it is purely for parsing numeric inputs. Another assumption here is that such date entry, although natural in speech, isn't so natural to write or type - especially if the keyboard has been switched to a numeric keyboard on the users device.
+`parse-numeric-date` can't take natural input such as "December 12, 2022" - it is purely for parsing numeric inputs. Another assumption here is that such date entry, although natural in speech, isn't so natural to type - especially if the keyboard has been switched to a numeric keyboard on the users device.
 
 If you want such parsing, perhaps you need:
 * [`parse-numeric-date`](https://github.com/kensnyder/any-date-parser)
@@ -88,7 +88,7 @@ Both are excellent, but can't parse numeric dates quite as fully as `parse-numer
 
 ## Comparison with other libraries
 
-You can see a comparison between [`parse-numeric-date`](https://github.com/kensnyder/any-date-parser) and `anyDateParser` and [`parse-dob`](https://github.com/HenrikJoreteg/parse-dob) over on Codepen: [Date parse testing](https://codepen.io/13twelve/pen/rNrRoLB?editors=0010)
+You can see a comparison between [`anyDateParser`](https://github.com/kensnyder/any-date-parser), [`parse-dob`](https://github.com/HenrikJoreteg/parse-dob) and [chrono-node](https://github.com/wanasit/chrono) over on Codepen: [Date parse testing](https://codepen.io/13twelve/pen/rNrRoLB?editors=0010)
 
 `parse-dob` by [@HenrikJoreteg](https://github.com/HenrikJoreteg) was a great inspiration, we think that forking `parse-dob` and removing the previous date restriction would be very interesting.
 

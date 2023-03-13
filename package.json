@@ -1,22 +1,20 @@
 {
   "name": "@area17/parse-numeric-date",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Parse numeric based date inputs",
   "type": "module",
   "source": "src/index.js",
   "exports": {
-      "require": "./dist/parse-numeric-date.cjs",
-      "default": "./dist/parse-numeric-date.modern.js"
+    "require": "./dist/parse-numeric-date.cjs",
+    "default": "./dist/parse-numeric-date.modern.js"
   },
   "main": "./dist/parse-numeric-date.cjs",
   "module": "./dist/parse-numeric-date.module.js",
   "unpkg": "./dist/parse-numeric-date.umd.js",
   "scripts": {
-      "build": "microbundle",
-      "dev": "microbundle watch",
-      "devdebug": "microbundle watch --compress false",
-      "test": "jest",
-      "format": "prettier --write . '!dist/**/*'"
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "devdebug": "microbundle watch --compress false"
   },
   "repository": {
     "type": "git",

@@ -1,20 +1,3 @@
-/*
-  TODO:
-
-  Persian Dates:
-  ` ۱۳۸۹/۵/۱۶` (year/month/day)
-
-  `۱۴۰۰/۱۱/۲۱` is 2022-02-10
-
-  Chinese Dates:
-  2022年12月13日
-
-  Other:
-  13. 12. 2022
-  13‏/12‏/2022.
-*/
-
-
 let locale = new Intl.NumberFormat().resolvedOptions().locale;
 const twoDigitCutoffYear = 60;
 const today = new Date().setHours(0, 0, 0, 0);
@@ -49,6 +32,14 @@ const make4DigitYear = (y) => {
   return y;
 }
 
+/*
+    persianToGregorian,
+    adapted from: https://stackoverflow.com/questions/71421825/how-to-convert-persian-jalali-dates-to-other-18-calendar-dates-in-javascript-w
+
+    credit to Mohsen Alyafei
+    https://github.com/MohsenAlyafei
+    https://twitter.com/maalyafei
+*/
 function persianToGregorian(year, month, day) {
   year = parseInt(year, 10);
   month = parseInt(month, 10);

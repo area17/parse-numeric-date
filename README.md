@@ -107,9 +107,9 @@ To run:
 $ npm run test
 ```
 
-## Future development
+## Credits
 
-* Add support for other international date formats, such as Chinese and Persian dates.
+Thanks to [@Mohsen Alyafei](https://github.com/MohsenAlyafei) for his Persian to Gregorian conversion function on [Stackoverflow](https://stackoverflow.com/questions/71421825/how-to-convert-persian-jalali-dates-to-other-18-calendar-dates-in-javascript-w).
 
 ## Code of Conduct
 

@@ -118,7 +118,7 @@ const getMostProbableDate = (dates) => {
     });
 
   // whats our highest score?
-  const highestScore = dates[0].score;
+  const highestScore = dates.length ? dates[0].score : 0;
 
   // remove anything that hasn't got the lowest score
   // get just the dates

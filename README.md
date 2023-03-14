@@ -1,6 +1,7 @@
 # parse-numeric-date
 
-Micro library to parse numeric based date inputs - ~4kb minified/~1kb gzip
+Micro library to parse numeric based date inputs
+~5kb minified/~1kb gzip
 
 ## Mission Statement
 
@@ -64,6 +65,10 @@ let isoString = parseNumericDate('29/12/25', {
 * 01-01-22
 * 1-1-22
 * 1-1-2022
+* ۱۴۰۰/۱۱/۲۱
+* 2022年12月13日
+* 13. 12. 2022
+* 13‏/12‏/2022.
 
 ## Notes
 

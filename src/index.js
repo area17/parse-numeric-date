@@ -209,7 +209,7 @@ const parseNumericDate = (dateStr, options) => {
 
   // input probably = ISO YYYY-MM-DD or YYYY-M-D
   let matches = [
-    ...dateStr.matchAll(/([0-9]{4})[^0-9]{1}([0-9]{1,2})[^0-9]{1}([0-9]{1,2})/g)
+    ...dateStr.matchAll(/([0-9]{4})[^0-9]{1,}([0-9]{1,2})[^0-9]{1,}([0-9]{1,2})/g)
   ];
   if (matches.length > 0) {
     if (originalDateStr.match(/[۰-۹]/g)) {
@@ -222,7 +222,7 @@ const parseNumericDate = (dateStr, options) => {
   // input doesn't follow ISO YYYY-MM-DD
   // lets check for DD-MM-YYYY (or MM-DD-YYYY)
   matches = [
-    ...dateStr.matchAll(/([0-9]{1,2})[^0-9]{1}([0-9]{2})[^0-9]{1}([0-9]{4})/g)
+    ...dateStr.matchAll(/([0-9]{1,2})[^0-9]{1,}([0-9]{2})[^0-9]{1,}([0-9]{4})/g)
   ];
   if (matches.length > 0) {
     dates.push({
@@ -246,7 +246,7 @@ const parseNumericDate = (dateStr, options) => {
   // and D-M-YY, M-DD-YY
   matches = [
     ...dateStr.matchAll(
-      /([0-9]{1,2})[^0-9]{1}([0-9]{1,2})[^0-9]{1}([0-9]{1,2})/g
+      /([0-9]{1,2})[^0-9]{1,}([0-9]{1,2})[^0-9]{1,}([0-9]{1,2})/g
     )
   ];
   if (matches.length > 0) {

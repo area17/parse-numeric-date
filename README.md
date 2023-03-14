@@ -1,6 +1,7 @@
 # parse-numeric-date
 
-Micro library to parse numeric based date inputs - ~4kb minified/~1kb gzip
+Micro library to parse numeric based date inputs
+~5kb minified/~1kb gzip
 
 ## Mission Statement
 
@@ -64,6 +65,10 @@ let isoString = parseNumericDate('29/12/25', {
 * 01-01-22
 * 1-1-22
 * 1-1-2022
+* ۱۴۰۰/۱۱/۲۱
+* 2022年12月13日
+* 13. 12. 2022
+* 13‏/12‏/2022.
 
 ## Notes
 
@@ -102,9 +107,9 @@ To run:
 $ npm run test
 ```
 
-## Future development
+## Credits
 
-* Add support for other international date formats, such as Chinese and Persian dates.
+Thanks to [@Mohsen Alyafei](https://github.com/MohsenAlyafei) for his Persian to Gregorian conversion function on [Stackoverflow](https://stackoverflow.com/questions/71421825/how-to-convert-persian-jalali-dates-to-other-18-calendar-dates-in-javascript-w).
 
 ## Code of Conduct
 

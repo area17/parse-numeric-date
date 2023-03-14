@@ -2,14 +2,16 @@
   TODO:
 
   Persian Dates:
+  ` ۱۳۸۹/۵/۱۶` (year/month/day)
 
-  ` ١٨‏/١‏/١٩`
-  ` ۱۳۸۹/۵/۱۶`
+  `۱۴۰۰/۱۱/۲۱` is 2022-02-10
 
   Chinese Dates:
+  2022年12月13日
 
-  1924年9月25日
-  25‏/9‏/1924.
+  Other:
+  13. 12. 2022
+  13‏/12‏/2022.
 */
 
 
@@ -47,6 +49,61 @@ const make4DigitYear = (y) => {
   return y;
 }
 
+function persianToGregorian(year, month, day) {
+  year = parseInt(year, 10);
+  month = parseInt(month, 10);
+  day = parseInt(day, 10);
+
+  const dFormat = new Intl.DateTimeFormat('en-u-ca-persian',{
+    dateStyle:'short',
+    timeZone:'UTC'
+  });
+
+  let gregorianDate = new Date(Date.UTC(2000,month,day));
+
+  gregorianDate = new Date(gregorianDate.setUTCDate(gregorianDate.getUTCDate() + 226867));
+
+  const gregorianYear = gregorianDate.getUTCFullYear() - 2000 + year;
+  gregorianDate = new Date(
+    ((gregorianYear < 0) ? '-' : '+') +
+    ('00000' + Math.abs(gregorianYear)).slice(-6) +
+    '-' +
+    ('0' + (gregorianDate.getUTCMonth() + 1)).slice(-2) +
+    '-' +
+    ('0' + (gregorianDate.getUTCDate())).slice(-2)
+  );
+
+  let [pM, pD, pY] = [...dFormat.format(gregorianDate).split('/')]
+  let i = 0;
+
+  gregorianDate = new Date(
+    gregorianDate.setUTCDate(
+      gregorianDate.getUTCDate() +
+      Math.floor(
+        (year * 365.25) +
+        (month * 30.44) +
+        day -
+        (
+          (pY.split(' ')[0] * 365.25) +
+          (pM * 30.44) +
+          (pD*1)
+        )
+      ) - 2
+    )
+  );
+
+  while (i < 4) {
+    [pM, pD, pY] = [...dFormat.format(gregorianDate).split('/')];
+    if (parseInt(pD, 10) === day && parseInt(pM , 10) === month && parseInt(pY.split(' ')[0], 10) === year) {
+      return gregorianDate;
+    }
+    gregorianDate = new Date(gregorianDate.setUTCDate(gregorianDate.getUTCDate() + 1));
+    i++;
+  }
+  console.log('Invalid Persian date');
+  throw new Error('Invalid Persian date');
+}
+
 const generateDate = (y, m, d) => {
   // if year is 2 digits, guess 19XX or 20XX
   y = make4DigitYear(y);
@@ -76,7 +133,7 @@ const generateDate = (y, m, d) => {
   }
 };
 
-const getMostProbableDate = (dates) => {
+const getMostProbableDate = (dates, dateStr) => {
   // make date strs, set order score
   // filter out nulls
   // order by score
@@ -145,7 +202,9 @@ const parseNumericDate = (dateStr, options) => {
     localeOrder = getLocaleOrder();
   }
 
-  dateStr = dateStr.trim();
+  let originalDateStr = dateStr;
+  dateStr = dateStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
   let dates = [];
 
   // input probably = ISO YYYY-MM-DD or YYYY-M-D
@@ -153,7 +212,11 @@ const parseNumericDate = (dateStr, options) => {
     ...dateStr.matchAll(/([0-9]{4})[^0-9]{1}([0-9]{1,2})[^0-9]{1}([0-9]{1,2})/g)
   ];
   if (matches.length > 0) {
-    return generateDate(matches[0][1], matches[0][2], matches[0][3]);
+    if (originalDateStr.match(/[۰-۹]/g)) {
+        return persianToGregorian(matches[0][1], matches[0][2], matches[0][3]);
+    } else {
+        return generateDate(matches[0][1], matches[0][2], matches[0][3]);
+    }
   }
 
   // input doesn't follow ISO YYYY-MM-DD
@@ -208,7 +271,7 @@ const parseNumericDate = (dateStr, options) => {
       order: 'y-m-d'
     });
     //
-    return getMostProbableDate(dates, dateStr);
+    return getMostProbableDate(dates, originalDateStr);
   }
 
   // input has no spaces between dates

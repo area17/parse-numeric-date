@@ -89,13 +89,21 @@ Both are excellent, but can't parse numeric dates quite as fully as `parse-numer
 
 ## Comparison with other libraries
 
-You can see a comparison between `parse-numeric-date`, [`anyDateParser`](https://github.com/kensnyder/any-date-parser), [`parse-dob`](https://github.com/HenrikJoreteg/parse-dob) and [`chrono-node`](https://github.com/wanasit/chrono) over on Codepen: [Date parse testing](https://codepen.io/13twelve/pen/rNrRoLB?editors=0010)
+You can see a comparison between `parse-numeric-date`, [`anyDateParser`](https://github.com/kensnyder/any-date-parser), [`parse-dob`](https://github.com/HenrikJoreteg/parse-dob) and [`chrono-node`](https://github.com/wanasit/chrono) over on Codepen: [Date parse testing](https://codepen.io/13twelve/pen/rNrRoLB)
 
 `parse-dob` by [@HenrikJoreteg](https://github.com/HenrikJoreteg) was a great inspiration, we think that forking `parse-dob` and removing the previous date restriction would be very interesting.
 
+### Tests
+
+Written using [Jest](https://jestjs.io/) with tests in `/test/`. 
+To run:
+
+```Shell
+$ npm run test
+```
+
 ## Future development
 
-* Add tests (and not just use [https://area17.github.io/parse-numeric-date/](https://area17.github.io/parse-numeric-date/) for testing)
 * Add support for other international date formats, such as Chinese and Persian dates.
 
 ## Code of Conduct

@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Add parsing date types:
 * ۱۴۰۰/۱۱/۲۱
 * 2022年12月13日
-* 13. 12. 2022
+* `13. 12. 2022`
 * 13‏/12‏/2022.
 
 ## 0.0.6

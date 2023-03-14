@@ -101,6 +101,9 @@ describe('parseNumericDate', () => {
           const d = parseNumericDate(test[0]);
           const e = new Date(`${test[1]}T00:00:00.000+00:00`);
           expect(d).toEqual(e);
+
+          const isDate = d instanceof Date;
+          expect(isDate).toEqual(true);
         });
     });
 
@@ -109,6 +112,9 @@ describe('parseNumericDate', () => {
           const d = parseNumericDate(test[0]);
           const e = test[1];
           expect(d).toEqual(e);
+
+          const isDate = d instanceof Date;
+          expect(isDate).toEqual(false);
         });
     });
 });

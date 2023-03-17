@@ -1,5 +1,4 @@
 let locale = new Intl.NumberFormat().resolvedOptions().locale;
-const twoDigitCutoffYear = 60;
 const today = new Date().setHours(0, 0, 0, 0);
 const thisYear = new Date(today).getFullYear();
 const yearInMs = 365.25 * 24 * 60 * 60 * 1000;
@@ -27,7 +26,11 @@ const daysInMonth = (m, y) => {
 
 const make4DigitYear = (y) => {
   if (y.length === 2) {
-    return parseInt(y) > twoDigitCutoffYear ? `19${y}` : `20${y}`;
+    let twoDigitCutoffYear = 50;
+    let century = Math.floor(thisYear / 1000) * 1000;
+    let year = century + parseInt(y, 10);
+    let diff = Math.abs(year - (thisYear + twoDigitCutoffYear));
+    return (year < thisYear + twoDigitCutoffYear) || diff > 100 ? year : year - 100;
   }
   return y;
 }
@@ -291,36 +294,46 @@ const parseNumericDate = (dateStr, options) => {
   // input has no spaces between dates
   // very much guessing now
 
-  // could be YYYYMMDD, DDMMYYYY, MMDDYYYY
-  if (dateStr.length === 8) {
-    dates = splitDates(dateStr, ['YYYYMMDD', 'DDMMYYYY', 'MMDDYYYY']);
-  }
+  matches = [
+    ...dateStr.matchAll(
+      /[0-9]{1,}/g
+    )
+  ];
+  if (matches.length > 0) {
+      // could be YYYYMMDD, DDMMYYYY, MMDDYYYY
+      if (dateStr.length === 8) {
+        dates = splitDates(dateStr, ['YYYYMMDD', 'DDMMYYYY', 'MMDDYYYY']);
+      }
 
-  // could be YYYYMMD, YYYYMDD,
-  // or DDMYYYY, MDDYYYY, DMMYYYY, MMDYYYY
-  if (dateStr.length === 7) {
-    dates = splitDates(dateStr, ['YYYYMMD', 'YYYYMDD', 'DDMYYYY', 'MDDYYYY', 'DMMYYYY', 'MMDYYYY']);
-  }
+      // could be YYYYMMD, YYYYMDD,
+      // or DDMYYYY, MDDYYYY, DMMYYYY, MMDYYYY
+      if (dateStr.length === 7) {
+        dates = splitDates(dateStr, ['YYYYMMD', 'YYYYMDD', 'DDMYYYY', 'MDDYYYY', 'DMMYYYY', 'MMDYYYY']);
+      }
 
-  // or could be YYMMDD, DDMMYY, MMDDYY
-  // or worse, could be YYYYMD, DMYYYY, MDYYYY
-  if (dateStr.length === 6) {
-    dates = splitDates(dateStr, ['YYMMDD', 'DDMMYY', 'MMDDYY', 'YYYYMD', 'DMYYYY', 'MDYYYY']);
-  }
+      // or could be YYMMDD, DDMMYY, MMDDYY
+      // or worse, could be YYYYMD, DMYYYY, MDYYYY
+      if (dateStr.length === 6) {
+        dates = splitDates(dateStr, ['YYMMDD', 'DDMMYY', 'MMDDYY', 'YYYYMD', 'DMYYYY', 'MDYYYY']);
+      }
 
-  // could be YYMMD, YYMDD,
-  // or DDMYY, MDDYY, DMMYY, MMDYY
-  if (dateStr.length === 5) {
-    dates = splitDates(dateStr, ['YYMMD', 'YYMDD', 'DDMYY', 'MDDYY', 'DMMYY', 'MMDYY']);
-  }
+      // could be YYMMD, YYMDD,
+      // or DDMYY, MDDYY, DMMYY, MMDYY
+      if (dateStr.length === 5) {
+        dates = splitDates(dateStr, ['YYMMD', 'YYMDD', 'DDMYY', 'MDDYY', 'DMMYY', 'MMDYY']);
+      }
 
-  // could be YYMD, DMYY, MDYY
-  if (dateStr.length === 4) {
-    dates = splitDates(dateStr, ['YYMD', 'DMYY', 'MDYY']);
-  }
+      // could be YYMD, DMYY, MDYY
+      if (dateStr.length === 4) {
+        dates = splitDates(dateStr, ['YYMD', 'DMYY', 'MDYY']);
+      }
 
-  //
-  return getMostProbableDate(dates, dateStr);
+      //
+      return getMostProbableDate(dates, dateStr);
+   }
+
+   console.log('parseNumericDate - unknown format:', dateStr);
+   return null;
 };
 
 export default parseNumericDate;

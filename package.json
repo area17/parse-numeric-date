@@ -1,6 +1,6 @@
 {
   "name": "@area17/parse-numeric-date",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Parse numeric based date inputs",
   "type": "module",
   "source": "src/index.js",

@@ -1,7 +1,7 @@
 # parse-numeric-date
 
 Micro library to parse numeric based date inputs
-~5kb minified/~1kb gzip
+~4kb minified/~1kb gzip
 
 ## Mission Statement
 

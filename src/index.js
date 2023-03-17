@@ -95,6 +95,29 @@ function persianToGregorian(year, month, day) {
   throw new Error('Invalid Persian date');
 }
 
+const getDatePart = (dateStr, format, part) => {
+    return dateStr.substring(format.indexOf(part), format.indexOf(part) + (format.match(new RegExp(part, 'g')) || []).length);
+};
+
+const splitDateString = (dateStr, format) => {
+    const parts = [
+      { name: 'd', index: format.indexOf('D') },
+      { name: 'm', index: format.indexOf('M') },
+      { name: 'y', index: format.indexOf('Y') },
+    ].sort((a, b) => a.index - b.index);
+
+    return {
+        y: getDatePart(dateStr, format, 'Y'),
+        m: getDatePart(dateStr, format, 'M'),
+        d: getDatePart(dateStr, format, 'D'),
+        order: parts.map(item => item.name).join('-'),
+    }
+};
+
+const splitDates = (dateStr, formats) => {
+    return formats.map(format => splitDateString(dateStr, format));
+};
+
 const generateDate = (y, m, d) => {
   // if year is 2 digits, guess 19XX or 20XX
   y = make4DigitYear(y);
@@ -270,189 +293,30 @@ const parseNumericDate = (dateStr, options) => {
 
   // could be YYYYMMDD, DDMMYYYY, MMDDYYYY
   if (dateStr.length === 8) {
-    dates.push({
-      y: dateStr.substring(4, 8),
-      m: dateStr.substring(2, 4),
-      d: dateStr.substring(0, 2),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(4, 8),
-      m: dateStr.substring(0, 2),
-      d: dateStr.substring(2, 4),
-      order: 'm-d-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 4),
-      m: dateStr.substring(4, 6),
-      d: dateStr.substring(6, 8),
-      order: 'y-m-d'
-    });
+    dates = splitDates(dateStr, ['YYYYMMDD', 'DDMMYYYY', 'MMDDYYYY']);
   }
 
   // could be YYYYMMD, YYYYMDD,
   // or DDMYYYY, MDDYYYY, DMMYYYY, MMDYYYY
   if (dateStr.length === 7) {
-    dates.push({
-      y: dateStr.substring(0, 4),
-      m: dateStr.substring(4, 6),
-      d: dateStr.substring(6, 7),
-      order: 'y-m-d'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 4),
-      m: dateStr.substring(4, 5),
-      d: dateStr.substring(5, 7),
-      order: 'y-m-d'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 7),
-      m: dateStr.substring(2, 3),
-      d: dateStr.substring(0, 2),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 7),
-      m: dateStr.substring(1, 3),
-      d: dateStr.substring(0, 1),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 7),
-      m: dateStr.substring(0, 2),
-      d: dateStr.substring(2, 3),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 7),
-      m: dateStr.substring(0, 1),
-      d: dateStr.substring(2, 3),
-      order: 'd-m-y'
-    });
+    dates = splitDates(dateStr, ['YYYYMMD', 'YYYYMDD', 'DDMYYYY', 'MDDYYYY', 'DMMYYYY', 'MMDYYYY']);
   }
 
   // or could be YYMMDD, DDMMYY, MMDDYY
   // or worse, could be YYYYMD, DMYYYY, MDYYYY
   if (dateStr.length === 6) {
-    dates.push({
-      y: dateStr.substring(4, 6),
-      m: dateStr.substring(2, 4),
-      d: dateStr.substring(0, 2),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(4, 6),
-      m: dateStr.substring(0, 2),
-      d: dateStr.substring(2, 4),
-      order: 'm-d-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 2),
-      m: dateStr.substring(2, 4),
-      d: dateStr.substring(4, 6),
-      order: 'y-m-d'
-    });
-
-    /**/
-    dates.push({
-      y: dateStr.substring(2, 6),
-      m: dateStr.substring(1, 2),
-      d: dateStr.substring(0, 1),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(2, 6),
-      m: dateStr.substring(0, 1),
-      d: dateStr.substring(1, 2),
-      order: 'm-d-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 4),
-      m: dateStr.substring(4, 5),
-      d: dateStr.substring(5, 6),
-      order: 'y-m-d'
-    });
+    dates = splitDates(dateStr, ['YYMMDD', 'DDMMYY', 'MMDDYY', 'YYYYMD', 'DMYYYY', 'MDYYYY']);
   }
 
   // could be YYMMD, YYMDD,
   // or DDMYY, MDDYY, DMMYY, MMDYY
   if (dateStr.length === 5) {
-    dates.push({
-      y: dateStr.substring(0, 2),
-      m: dateStr.substring(2, 4),
-      d: dateStr.substring(4, 5),
-      order: 'y-m-d'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 2),
-      m: dateStr.substring(2, 3),
-      d: dateStr.substring(3, 5),
-      order: 'y-m-d'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 5),
-      m: dateStr.substring(2, 3),
-      d: dateStr.substring(0, 2),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 5),
-      m: dateStr.substring(1, 3),
-      d: dateStr.substring(0, 1),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 5),
-      m: dateStr.substring(0, 2),
-      d: dateStr.substring(2, 3),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(3, 5),
-      m: dateStr.substring(0, 1),
-      d: dateStr.substring(2, 3),
-      order: 'd-m-y'
-    });
+    dates = splitDates(dateStr, ['YYMMD', 'YYMDD', 'DDMYY', 'MDDYY', 'DMMYY', 'MMDYY']);
   }
 
   // could be YYMD, DMYY, MDYY
   if (dateStr.length === 4) {
-    dates.push({
-      y: dateStr.substring(2, 4),
-      m: dateStr.substring(1, 2),
-      d: dateStr.substring(0, 1),
-      order: 'd-m-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(2, 4),
-      m: dateStr.substring(0, 1),
-      d: dateStr.substring(1, 2),
-      order: 'm-d-y'
-    });
-
-    dates.push({
-      y: dateStr.substring(0, 2),
-      m: dateStr.substring(2, 3),
-      d: dateStr.substring(3, 4),
-      order: 'y-m-d'
-    });
+    dates = splitDates(dateStr, ['YYMD', 'DMYY', 'MDYY']);
   }
 
   //
